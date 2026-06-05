@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply font-sans text-neutral-800 bg-[#FCFBF7] antialiased transition-colors duration-300;
+    font-family: 'Inter', sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
 @layer utilities {
   .scrollbar-none::-webkit-scrollbar {
     display: none;
