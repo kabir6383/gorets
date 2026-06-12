@@ -1,26 +1,41 @@
 {
-  "name": "gorets-cafe",
-  "private": true,
+  "name": "gorets",
   "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
-  },
+  "main": "expo-router/entry",
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@expo-google-fonts/outfit": "^0.4.3",
+    "@expo/metro-runtime": "~56.0.14",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@supabase/supabase-js": "^2.108.1",
+    "expo": "~56.0.11",
+    "expo-font": "^56.0.6",
+    "expo-haptics": "^56.0.3",
+    "expo-linear-gradient": "^56.0.4",
+    "expo-linking": "^56.0.14",
+    "expo-router": "^56.2.10",
+    "expo-splash-screen": "^56.0.10",
+    "expo-status-bar": "~56.0.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-reanimated": "4.3.1",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-url-polyfill": "^3.0.0",
+    "react-native-web": "^0.21.2"
   },
   "devDependencies": {
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.4",
-    "typescript": "^5.2.2",
-    "vite": "^5.3.1"
-  }
+    "@babel/core": "^7.29.7",
+    "@types/react": "~19.2.2",
+    "@types/react-native": "^0.72.8",
+    "babel-preset-expo": "^56.0.14",
+    "tailwindcss": "^3.3.2",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "private": true
 }

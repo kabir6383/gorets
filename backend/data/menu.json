@@ -1,0 +1,818 @@
+[
+  {
+    "id": "m1",
+    "name": "FRENCH FRIES ( SALTED )",
+    "category": "CLASSIC APPETIZERS",
+    "price": 129,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc42473d779a08d1c544fb74bae39.jpg",
+    "tags": []
+  },
+  {
+    "id": "m2",
+    "name": "FRENCH FRIES ( HOT'N'SPICY )",
+    "category": "CLASSIC APPETIZERS",
+    "price": 139,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc426b20a747cae42dee4f5338092.jpg",
+    "tags": []
+  },
+  {
+    "id": "m3",
+    "name": "GARLIC BREAD",
+    "category": "CLASSIC APPETIZERS",
+    "price": 169,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc46e611e751f84ab08c4db0506a9.jpg",
+    "tags": []
+  },
+  {
+    "id": "m4",
+    "name": "LOADED FRIES WITH CHICKEN",
+    "category": "CLASSIC APPETIZERS",
+    "price": 199,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc4707c3772deb063dda9cfc3ef3e.jpg",
+    "tags": []
+  },
+  {
+    "id": "m5",
+    "name": "BRUSCHETTA",
+    "category": "CLASSIC APPETIZERS",
+    "price": 219,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193afe0630f72f0842e67e0c125fc3e.jpg",
+    "tags": []
+  },
+  {
+    "id": "m6",
+    "name": "CHICKEN CHEESE BALLS",
+    "category": "CLASSIC APPETIZERS",
+    "price": 249,
+    "image": "https://media.dodostatic.com/image/r:520x520/0196bfcd5a09736faae37eeb8b304249.jpg",
+    "tags": []
+  },
+  {
+    "id": "m7",
+    "name": "DYNAMITE CHICKEN",
+    "category": "CLASSIC APPETIZERS",
+    "price": 249,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0f75c5d760397768977a198f7c8.jpg",
+    "tags": []
+  },
+  {
+    "id": "m8",
+    "name": "CHIZZA",
+    "category": "CLASSIC APPETIZERS",
+    "price": 259,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0d3f92e78c49b6ea991edadbe3c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m9",
+    "name": "CREAMY CHEESY CHICKEN",
+    "category": "CLASSIC APPETIZERS",
+    "price": 259,
+    "image": "https://media.dodostatic.com/image/r:520x520/0196bfd28d47701ca67d26f567fa3d1c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m10",
+    "name": "EXTRA SAUCE OR DIPS",
+    "category": "CLASSIC APPETIZERS",
+    "price": 50,
+    "image": "https://media.dodostatic.com/image/r:520x520/0196bfd2fccb75589f586210640ab2fe.jpg",
+    "tags": []
+  },
+  {
+    "id": "m11",
+    "name": "CHICKEN POPCORN",
+    "category": "NYC’S SPECIALS",
+    "price": 199,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc47aa3ba739dbe989e413e50e7bd.jpg",
+    "tags": []
+  },
+  {
+    "id": "m12",
+    "name": "CHICKEN STRIPS",
+    "category": "NYC’S SPECIALS",
+    "price": 239,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc479f68174de92fb21c9b6b15e63.jpg",
+    "tags": []
+  },
+  {
+    "id": "m13",
+    "name": "CRISPY CHICKEN WINGS",
+    "category": "NYC’S SPECIALS",
+    "price": 239,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b11dc6297669ba6189c87ccd8622.jpg",
+    "tags": []
+  },
+  {
+    "id": "m14",
+    "name": "NYC’S CLASSIC FRIED CHICKEN",
+    "category": "NYC’S SPECIALS",
+    "price": 199,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0d908e270eea200877220ba8179.jpg",
+    "tags": []
+  },
+  {
+    "id": "m15",
+    "name": "EXTRA SAUCE AND DIPS",
+    "category": "NYC’S SPECIALS",
+    "price": 50,
+    "image": "https://media.dodostatic.com/image/r:520x520/0196c06c880a74f0802d514ccc482190.jpg",
+    "tags": []
+  },
+  {
+    "id": "m16",
+    "name": "BBQ Quarter",
+    "category": "BBQ (6pm-9.30pm)",
+    "price": 149,
+    "image": "https://media.dodostatic.com/image/r:520x520/0196c06faeff7658ad3d35b3237eccab.jpg",
+    "tags": []
+  },
+  {
+    "id": "m17",
+    "name": "BBQ Half",
+    "category": "BBQ (6pm-9.30pm)",
+    "price": 289,
+    "image": "https://media.dodostatic.com/image/r:520x520/0196c07015067410b4fdf6abdae79c8b.jpg",
+    "tags": []
+  },
+  {
+    "id": "m18",
+    "name": "BBQ Full",
+    "category": "BBQ (6pm-9.30pm)",
+    "price": 569,
+    "image": "https://media.dodostatic.com/image/r:520x520/0196c070bbd074b0bbe003d444a143d5.jpg",
+    "tags": []
+  },
+  {
+    "id": "m19",
+    "name": "EXTRA SAUCE AND DIPS",
+    "category": "BBQ (6pm-9.30pm)",
+    "price": 50,
+    "image": "https://media.dodostatic.com/image/r:520x520/0196c0712da17305a79a699e562be0b5.jpg",
+    "tags": []
+  },
+  {
+    "id": "m20",
+    "name": "CLASSIC MARGARITA",
+    "category": "VEGETARIAN PIZZA",
+    "price": 249,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0fd0d5c7378bd87f6ad94f50e7c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m21",
+    "name": "PIZZA OF NAPOLETANO",
+    "category": "VEGETARIAN PIZZA",
+    "price": 289,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0ffa27c7161b9cc42ccd90cde4a.jpg",
+    "tags": []
+  },
+  {
+    "id": "m22",
+    "name": "HOT’N’SPICY PANEER PIZZA",
+    "category": "VEGETARIAN PIZZA",
+    "price": 299,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0fe4f5470dca30e6cbdc61ee3ef.jpg",
+    "tags": []
+  },
+  {
+    "id": "m23",
+    "name": "Extra cheese",
+    "category": "VEGETARIAN PIZZA",
+    "price": 50,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0e39f1574969d87410fffa556b7.jpg",
+    "tags": []
+  },
+  {
+    "id": "m24",
+    "name": "PIZZA DI SIMPLY CHICKEN",
+    "category": "NON-VEGETARIAN PIZZA",
+    "price": 299,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b111ba8275c889ff596c980113b7.jpg",
+    "tags": []
+  },
+  {
+    "id": "m25",
+    "name": "SPANISH ‘DI’ SALCHICHA",
+    "category": "NON-VEGETARIAN PIZZA",
+    "price": 339,
+    "image": "https://media.dodostatic.com/image/r:520x520/0197072c1c2a711487d3aa4813532340.jpg",
+    "tags": []
+  },
+  {
+    "id": "m26",
+    "name": "HOT 'N' SPICY BURKINA FASO",
+    "category": "NON-VEGETARIAN PIZZA",
+    "price": 349,
+    "image": "https://media.dodostatic.com/image/r:520x520/01970715e78a756d9519de74e11e30f7.jpg",
+    "tags": []
+  },
+  {
+    "id": "m27",
+    "name": "CLASSIC CALABRESA PIZZA",
+    "category": "NON-VEGETARIAN PIZZA",
+    "price": 359,
+    "image": "https://media.dodostatic.com/image/r:520x520/0197072dd6eb74128f8c46dec2125241.jpg",
+    "tags": []
+  },
+  {
+    "id": "m28",
+    "name": "TWIST OF INDIA",
+    "category": "NON-VEGETARIAN PIZZA",
+    "price": 369,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b114278273399490a250feb54a63.jpg",
+    "tags": []
+  },
+  {
+    "id": "m29",
+    "name": "CLASSIC BBQ TWIST PIZZA",
+    "category": "NON-VEGETARIAN PIZZA",
+    "price": 369,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b115151272caa96d5a8f4fa89233.jpg",
+    "tags": []
+  },
+  {
+    "id": "m30",
+    "name": "Extra cheese",
+    "category": "NON-VEGETARIAN PIZZA",
+    "price": 50,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0dd7dca73a8a51590fda3ae096c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m31",
+    "name": "CREAMY ALFREDO CHICKEN PIZZA",
+    "category": "GORET’S SPECIAL PIZZA",
+    "price": 379,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6d2d4d5707ea91ee9210a53fdc5.jpg",
+    "tags": []
+  },
+  {
+    "id": "m32",
+    "name": "EXOTIC LUSIAN’S PRAWN TWIST",
+    "category": "GORET’S SPECIAL PIZZA",
+    "price": 399,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b1166791700c872dc3f117c79f19.jpg",
+    "tags": []
+  },
+  {
+    "id": "m33",
+    "name": "G-HOUSE “ALL- MEAT-MIXTURE“",
+    "category": "GORET’S SPECIAL PIZZA",
+    "price": 479,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b1173a6670fda08dffe1ca5ac08a.jpg",
+    "tags": []
+  },
+  {
+    "id": "m34",
+    "name": "Extra Cheese",
+    "category": "GORET’S SPECIAL PIZZA",
+    "price": 50,
+    "image": "https://media.dodostatic.com/image/r:520x520/019708cb3cc078828f15e0030fcb494b.jpg",
+    "tags": []
+  },
+  {
+    "id": "m35",
+    "name": "ARABIATA VEG PENNE PASTA",
+    "category": "PASTA",
+    "price": 259,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b11802d2753cbf657be775934f4f.jpg",
+    "tags": []
+  },
+  {
+    "id": "m36",
+    "name": "ALFREDO VEG PENNE PASTA",
+    "category": "PASTA",
+    "price": 279,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b1184bc075a7bd5b1ef06f562464.jpg",
+    "tags": []
+  },
+  {
+    "id": "m37",
+    "name": "ARABITA NON-VEG PENNE PASTA",
+    "category": "PASTA",
+    "price": 319,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b118a81478989a35dfdb7c704f44.jpg",
+    "tags": []
+  },
+  {
+    "id": "m38",
+    "name": "ALFREDO NON-VEG PENNE PASTA",
+    "category": "PASTA",
+    "price": 349,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b118e7a87775a3235e3ba530f036.jpg",
+    "tags": []
+  },
+  {
+    "id": "m39",
+    "name": "KID’S CHOCO SANDWICH",
+    "category": "SANDWICH",
+    "price": 139,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6df4a3d790180db41f325117b5e.jpg",
+    "tags": []
+  },
+  {
+    "id": "m40",
+    "name": "VEG CLUB SANDWICH",
+    "category": "SANDWICH",
+    "price": 159,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b11aa24c76f8b1b4fab345b01c09.jpg",
+    "tags": []
+  },
+  {
+    "id": "m41",
+    "name": "CORN SANDWICH",
+    "category": "SANDWICH",
+    "price": 179,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6e3e55e741ba483e233028eeff8.jpg",
+    "tags": []
+  },
+  {
+    "id": "m42",
+    "name": "PANEER SANDWICH",
+    "category": "SANDWICH",
+    "price": 189,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6e447b37694bd3ff6a372f2117f.jpg",
+    "tags": []
+  },
+  {
+    "id": "m43",
+    "name": "CHICKEN PEPPER SANDWICH",
+    "category": "SANDWICH",
+    "price": 209,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0f34062785d896822b9b592e726.jpg",
+    "tags": []
+  },
+  {
+    "id": "m44",
+    "name": "CHICKEN INDO-EURO SANDWICH",
+    "category": "SANDWICH",
+    "price": 239,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b11d2a4170b6b16e8d3a4f6ceb4c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m45",
+    "name": "Extra Cheese",
+    "category": "SANDWICH",
+    "price": 40,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0deedb7725786bbd0719173a50a.jpg",
+    "tags": []
+  },
+  {
+    "id": "m46",
+    "name": "VEG BURGER",
+    "category": "BURGER",
+    "price": 149,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b1197a6979528c7ad74ca28452aa.jpg",
+    "tags": []
+  },
+  {
+    "id": "m47",
+    "name": "ALOO TIKKI BURGER",
+    "category": "BURGER",
+    "price": 149,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6d9c30e74a09c407e353febf81b.jpg",
+    "tags": []
+  },
+  {
+    "id": "m48",
+    "name": "SIMPLY CHICKEN BURGER",
+    "category": "BURGER",
+    "price": 169,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b119dde6765f918d249fed19a7c7.jpg",
+    "tags": []
+  },
+  {
+    "id": "m49",
+    "name": "TEXA’S ZINGER BURGER",
+    "category": "BURGER",
+    "price": 189,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0da711271ddb2570aa15ab2557f.jpg",
+    "tags": []
+  },
+  {
+    "id": "m50",
+    "name": "NASHVILLE BURGER",
+    "category": "BURGER",
+    "price": 219,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6dc900f76e8bf2e505f83a76e9d.jpg",
+    "tags": []
+  },
+  {
+    "id": "m51",
+    "name": "ALL-CHICKEN-NO-BUN",
+    "category": "BURGER",
+    "price": 299,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0db00207372a7ee33abebc7318f.jpg",
+    "tags": []
+  },
+  {
+    "id": "m52",
+    "name": "Extra Cheese",
+    "category": "BURGER",
+    "price": 40,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0dc8de1755399ede565389eb4b6.jpg",
+    "tags": []
+  },
+  {
+    "id": "m53",
+    "name": "CORN WRAP",
+    "category": "WRAPS",
+    "price": 169,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6f6c7d573a1859870cf06fbf4cc.jpg",
+    "tags": []
+  },
+  {
+    "id": "m54",
+    "name": "PANEER WRAP",
+    "category": "WRAPS",
+    "price": 189,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6ed9deb799eab1e05c01caab1ca.jpg",
+    "tags": []
+  },
+  {
+    "id": "m55",
+    "name": "CHICK STRIPS WRAP",
+    "category": "WRAPS",
+    "price": 219,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6f7078a79149cfd9d8311f6bc93.jpg",
+    "tags": []
+  },
+  {
+    "id": "m56",
+    "name": "GORET’S SPECIAL WRAP",
+    "category": "WRAPS",
+    "price": 239,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6ee18877967b62fe7965b2a5834.jpg",
+    "tags": []
+  },
+  {
+    "id": "m57",
+    "name": "Extra Cheese",
+    "category": "WRAPS",
+    "price": 40,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0df959178149fd1692431cdf99a.jpg",
+    "tags": []
+  },
+  {
+    "id": "m58",
+    "name": "CLASSIC MILK WAFFLE",
+    "category": "WAFFLE SANDWICH",
+    "price": 89,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6f1b00b75eab74350c2377f61b5.jpg",
+    "tags": []
+  },
+  {
+    "id": "m59",
+    "name": "DARK AND WHITE WAFFLE",
+    "category": "WAFFLE SANDWICH",
+    "price": 99,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6f220da73619654c68728922836.jpg",
+    "tags": []
+  },
+  {
+    "id": "m60",
+    "name": "COOKIE AND CREAM WAFFLE",
+    "category": "WAFFLE SANDWICH",
+    "price": 119,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6f299a4758b98e8bf5f5748900e.jpg",
+    "tags": []
+  },
+  {
+    "id": "m61",
+    "name": "TRIPLE CHOCOLATE WAFFLE",
+    "category": "WAFFLE SANDWICH",
+    "price": 129,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc6f3fd24749591ceee92f4ba4d7c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m62",
+    "name": "CLASSIC DELIGHT",
+    "category": "WAFFLE WITH ICE CREAM",
+    "price": 159,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc71e590c70629a657954f6a4972c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m63",
+    "name": "CRUNCHY COOKIE DELIGHT",
+    "category": "WAFFLE WITH ICE CREAM",
+    "price": 179,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc72b20777037aa8f4606be4a3dfd.jpg",
+    "tags": []
+  },
+  {
+    "id": "m64",
+    "name": "DARK & WHITE DELIGHT",
+    "category": "WAFFLE WITH ICE CREAM",
+    "price": 199,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc72b59a17997850ae235e463cbdc.jpg",
+    "tags": []
+  },
+  {
+    "id": "m65",
+    "name": "Extra toppings",
+    "category": "WAFFLE WITH ICE CREAM",
+    "price": 20,
+    "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80",
+    "tags": []
+  },
+  {
+    "id": "m66",
+    "name": "COFFEE MILKSHAKE",
+    "category": "MILKSHAKES",
+    "price": 149,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc702b90f76b9b6f20ac6494fbc87.jpg",
+    "tags": []
+  },
+  {
+    "id": "m67",
+    "name": "STRAWBERRY MILKSHAKE",
+    "category": "MILKSHAKES",
+    "price": 159,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc7032cc57960a285d6ccfd0c7d67.jpg",
+    "tags": []
+  },
+  {
+    "id": "m68",
+    "name": "MANGO MALDA MILKSHAKE",
+    "category": "MILKSHAKES",
+    "price": 169,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc703784c7988afbdaf90399493a5.jpg",
+    "tags": []
+  },
+  {
+    "id": "m69",
+    "name": "SWISS CHOCO MILKSHAKE",
+    "category": "MILKSHAKES",
+    "price": 179,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc7043cd178d9a42755f53c70564e.jpg",
+    "tags": []
+  },
+  {
+    "id": "m70",
+    "name": "OREO KITKAT MILKSHAKE",
+    "category": "MILKSHAKES",
+    "price": 199,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc705243a745dac66f9a0e5b88635.jpg",
+    "tags": []
+  },
+  {
+    "id": "m71",
+    "name": "PEANUT BISCOFF MILKSHAKE",
+    "category": "MILKSHAKES",
+    "price": 199,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc704c19d76efb86fd1fa8bb97856.jpg",
+    "tags": []
+  },
+  {
+    "id": "m72",
+    "name": "FUDGY BROWNIE",
+    "category": "DESSERTS",
+    "price": 149,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc717a06f77c6aa5ab057e427ac33.jpg",
+    "tags": []
+  },
+  {
+    "id": "m73",
+    "name": "CHOCO LAVA WITH ICE CREAM",
+    "category": "DESSERTS",
+    "price": 169,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc718131771a8ac45dbeb21bb175c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m74",
+    "name": "BROWNIE WITH ICE CREAM",
+    "category": "DESSERTS",
+    "price": 179,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc718b5e472e8a267d2aeda4c8714.jpg",
+    "tags": []
+  },
+  {
+    "id": "m75",
+    "name": "DEATH BY CHOCOLATE",
+    "category": "DESSERTS",
+    "price": 249,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc71bd93175eab0321e14ea50d173.jpg",
+    "tags": []
+  },
+  {
+    "id": "m76",
+    "name": "CHOCO FANTASY",
+    "category": "DESSERTS",
+    "price": 249,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc719f2f5773494ebfaca02a9a4df.jpg",
+    "tags": []
+  },
+  {
+    "id": "m77",
+    "name": "CHOCO VANILLA SUNDAE",
+    "category": "SUNDAE",
+    "price": 169,
+    "image": "https://media.dodostatic.com/image/r:520x520/019b650c344a74fb93fd210a91d6794b.jpg",
+    "tags": []
+  },
+  {
+    "id": "m78",
+    "name": "CARAMELO BISCOTTI SUNDAE",
+    "category": "SUNDAE",
+    "price": 179,
+    "image": "https://media.dodostatic.com/image/r:520x520/019b6512c0b979a18c4469acf16f13f2.jpg",
+    "tags": []
+  },
+  {
+    "id": "m79",
+    "name": "BERRY DELIGHT SUNDAE",
+    "category": "SUNDAE",
+    "price": 189,
+    "image": "https://media.dodostatic.com/image/r:520x520/019b650d0f6576c4924af45d7b044af1.jpg",
+    "tags": []
+  },
+  {
+    "id": "m80",
+    "name": "CRUNCHY OREO SUNDAE",
+    "category": "SUNDAE",
+    "price": 189,
+    "image": "https://media.dodostatic.com/image/r:520x520/019b651108497709a754e0d4815c3b89.jpg",
+    "tags": []
+  },
+  {
+    "id": "m81",
+    "name": "CHOCOLATE SUNDAE",
+    "category": "SUNDAE",
+    "price": 199,
+    "image": "https://media.dodostatic.com/image/r:520x520/019b65122f9f71d99118680a03aea1da.jpg",
+    "tags": []
+  },
+  {
+    "id": "m82",
+    "name": "VANCHO SUNDAE",
+    "category": "SUNDAE",
+    "price": 229,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc709139b755a8b1078b373d89b9e.jpg",
+    "tags": []
+  },
+  {
+    "id": "m83",
+    "name": "Extra toppings",
+    "category": "SUNDAE",
+    "price": 20,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc70a7bd0765f8bd1bb5261c57cc6.jpg",
+    "tags": []
+  },
+  {
+    "id": "m84",
+    "name": "ROSE FALOODA",
+    "category": "FALOODA",
+    "price": 179,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc7317ab771a1bc288e1a1857e70c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m85",
+    "name": "CHOCOLATE FALOODA",
+    "category": "FALOODA",
+    "price": 189,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc731ca06764a99c583dcd8a8326c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m86",
+    "name": "THE ROYAL FALOODA",
+    "category": "FALOODA",
+    "price": 199,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc73244db74a0ac560e563b808813.jpg",
+    "tags": []
+  },
+  {
+    "id": "m87",
+    "name": "CLASSIC MINT",
+    "category": "MOJITO",
+    "price": 119,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc736f1af790f8e381362297402eb.jpg",
+    "tags": []
+  },
+  {
+    "id": "m88",
+    "name": "VIRGIN MOJITO",
+    "category": "MOJITO",
+    "price": 129,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc7375ad57941a035ef2ff65fd20c.jpg",
+    "tags": []
+  },
+  {
+    "id": "m89",
+    "name": "FRAGOLA MOJITO",
+    "category": "MOJITO",
+    "price": 139,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc737e46c74d9b86de3d0184a886f.jpg",
+    "tags": []
+  },
+  {
+    "id": "m90",
+    "name": "GREEN APPLE MOJITO",
+    "category": "MOJITO",
+    "price": 149,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc738a37b70269e904de101b59a8e.jpg",
+    "tags": []
+  },
+  {
+    "id": "m91",
+    "name": "KING'S BLUE MOJITO",
+    "category": "MOJITO",
+    "price": 149,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b1343abc7785b4abcfea7f59a956.jpg",
+    "tags": []
+  },
+  {
+    "id": "m92",
+    "name": "JIGARTHANDA",
+    "category": "GORET’S JIGARTHANDA",
+    "price": 99,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b1b7b60076ffbdc583017d9461a0.jpg",
+    "tags": []
+  },
+  {
+    "id": "m93",
+    "name": "JIGARTHANDA WITH ICE CREAM",
+    "category": "GORET’S JIGARTHANDA",
+    "price": 119,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b1b7503f753a8816281ff405f1b8.jpg",
+    "tags": []
+  },
+  {
+    "id": "m94",
+    "name": "FRESH LIME",
+    "category": "FRESH JUICES",
+    "price": 69,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc713b9e4789294f4d895281768e9.jpg",
+    "tags": []
+  },
+  {
+    "id": "m95",
+    "name": "WATERMELON",
+    "category": "FRESH JUICES",
+    "price": 79,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0e3430b76cba595c9cb59777c35.jpg",
+    "tags": []
+  },
+  {
+    "id": "m96",
+    "name": "ORANGE",
+    "category": "FRESH JUICES",
+    "price": 89,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0e31de675eb96a03588159a4ddc.jpg",
+    "tags": []
+  },
+  {
+    "id": "m97",
+    "name": "POMEGRANATE",
+    "category": "FRESH JUICES",
+    "price": 99,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0e2f5e27348aa52c20c8dc0d300.jpg",
+    "tags": []
+  },
+  {
+    "id": "m98",
+    "name": "CLASSIC HOT CHOCOLATE",
+    "category": "HOT CHOCOLATE",
+    "price": 99,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc711eaad77fa9a22bc09801a79ab.jpg",
+    "tags": []
+  },
+  {
+    "id": "m99",
+    "name": "TRIPLE HOT CHOCOLATE",
+    "category": "HOT CHOCOLATE",
+    "price": 119,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc712d5a470c8b72f634ea297674b.jpg",
+    "tags": []
+  },
+  {
+    "id": "m100",
+    "name": "TEA",
+    "category": "HOT BEVERAGES",
+    "price": 20,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0e1620371f9a6592b172ddb9c87.jpg",
+    "tags": []
+  },
+  {
+    "id": "m101",
+    "name": "COFFEE",
+    "category": "HOT BEVERAGES",
+    "price": 35,
+    "image": "https://media.dodostatic.com/image/r:520x520/0193b0e193137859bc82f928550b52da.jpg",
+    "tags": []
+  },
+  {
+    "id": "m102",
+    "name": "PARCEL TEA",
+    "category": "HOT BEVERAGES",
+    "price": 40,
+    "image": "https://media.dodostatic.com/image/r:520x520/019cc71028f177c6bbda9e9f8eb98a6f.jpg",
+    "tags": []
+  }
+]
