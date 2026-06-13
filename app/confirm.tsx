@@ -305,6 +305,7 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(245,158,11,0.04)',
   },
 
+  container: { flex: 1, paddingHorizontal: 20, paddingTop: 40 },
   containerWeb: { maxWidth: 500, alignSelf: 'center', width: '100%' },
 
   iconRing: { width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(16,185,129,0.1)', alignItems: 'center', justifyContent: 'center', marginBottom: 24, alignSelf: 'center' },
@@ -350,6 +351,9 @@ const s = StyleSheet.create({
   refundCard: { width: '100%', backgroundColor: 'rgba(239,68,68,0.06)', borderRadius: 16, padding: 18, borderWidth: 1, borderColor: 'rgba(239,68,68,0.2)', marginBottom: 10 },
   refundTitle: { color: C.error, fontSize: 14, fontFamily: 'Outfit_800ExtraBold', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 },
   refundText: { color: C.textSec, fontSize: 13, fontFamily: 'Outfit_500Medium', lineHeight: 20 },
+  ctaBtn: { width: '100%', borderRadius: 16, overflow: 'hidden' },
+  ctaGrad: { width: '100%', paddingVertical: 16, alignItems: 'center' },
+  ctaBtnText: { color: '#fff', fontFamily: 'Outfit_800ExtraBold', fontSize: 16 },
 
   // Modal UI
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' },

@@ -8,7 +8,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { C } from '../constants/colors';
 import { STATIC_MENU } from '../constants/menu';
-import { useCart } from '../store/cart';
 import { supabase } from '../utils/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCart } from '../store/cart';
