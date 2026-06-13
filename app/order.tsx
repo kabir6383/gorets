@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { C } from '../constants/colors';
 
 import { useCart } from '../store/cart';
+import { useAuth } from '../store/auth';
 import { supabase } from '../utils/supabase';
 
 type DiningMode = 'dine-in' | 'takeaway';
@@ -19,9 +20,10 @@ type PaymentMethod = 'cash' | 'upi';
 export default function OrderScreen() {
   const router = useRouter();
   const { cartItems, cartTotal, cartCount, clearCart, addOrderId, deviceId } = useCart();
+  const { user } = useAuth();
 
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState(user?.name || '');
+  const [phone, setPhone] = useState(user?.phone || '');
   const [diningMode, setDiningMode] = useState<DiningMode>('dine-in');
   const [tableNo, setTableNo] = useState('');
   const [addressLine1, setAddressLine1] = useState('');
@@ -60,10 +62,9 @@ export default function OrderScreen() {
           : null,
       };
 
-      // Try saving to Supabase first
       const { error } = await supabase.from('orders').insert([{
         id: orderId,
-        user_id: deviceId,
+        user_id: user?.id || deviceId,
         customer_name: payload.customer_name,
         customer_phone: payload.customer_phone,
         items: payload.items,

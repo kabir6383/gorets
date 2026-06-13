@@ -22,6 +22,7 @@ import MenuCard from '../components/MenuCard';
 import { C } from '../constants/colors';
 import { CAT_ICONS, MenuItem, STATIC_MENU } from '../constants/menu';
 import { useCart } from '../store/cart';
+import { useAuth } from '../store/auth';
 import { supabase } from '../utils/supabase';
 
 const { width: SW } = Dimensions.get('window');
@@ -33,6 +34,7 @@ const HERO_HEIGHT = 200;
 export default function MenuScreen() {
   const router = useRouter();
   const { cart, cartCount, cartTotal, addToCart, removeFromCart } = useCart();
+  const { user } = useAuth();
 
   const [menuItems, setMenuItems] = useState<MenuItem[]>(STATIC_MENU);
   const [loading, setLoading] = useState(true);
@@ -237,6 +239,14 @@ export default function MenuScreen() {
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <TouchableOpacity
+            style={s.profileBtn}
+            onPress={() => router.push(user ? '/profile' : '/login')}
+            activeOpacity={0.8}
+          >
+            <Text style={s.profileEmoji}>{user ? '👤' : '🔐'}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             style={s.historyBtn}
             onPress={() => router.push('/history')}
             activeOpacity={0.8}
@@ -352,6 +362,8 @@ const s = StyleSheet.create({
     letterSpacing: 1,
     marginTop: 1,
   },
+  profileBtn: { padding: 6 },
+  profileEmoji: { fontSize: 20 },
   cartBtn: { padding: 6, position: 'relative' },
   cartEmoji: { fontSize: 24 },
   historyBtn: { padding: 6 },

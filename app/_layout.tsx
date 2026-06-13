@@ -7,6 +7,7 @@ import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { C } from '../constants/colors';
 import { CartProvider } from '../store/cart';
+import { AuthProvider } from '../store/auth';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,21 +28,25 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <CartProvider>
-        <StatusBar style="light" />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: C.bg },
-            animation: 'slide_from_right',
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="cart" options={{ animation: 'slide_from_bottom', presentation: 'modal' }} />
-          <Stack.Screen name="order" options={{ animation: 'slide_from_bottom', presentation: 'modal' }} />
-          <Stack.Screen name="confirm" options={{ animation: 'fade', presentation: 'transparentModal' }} />
-        </Stack>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <StatusBar style="light" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: C.bg },
+              animation: 'slide_from_right',
+            }}
+          >
+            <Stack.Screen name="index" />
+            <Stack.Screen name="cart" options={{ animation: 'slide_from_bottom', presentation: 'modal' }} />
+            <Stack.Screen name="order" options={{ animation: 'slide_from_bottom', presentation: 'modal' }} />
+            <Stack.Screen name="confirm" options={{ animation: 'fade', presentation: 'transparentModal' }} />
+            <Stack.Screen name="login" options={{ animation: 'slide_from_bottom', presentation: 'modal' }} />
+            <Stack.Screen name="profile" options={{ animation: 'slide_from_right' }} />
+          </Stack>
+        </CartProvider>
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }
