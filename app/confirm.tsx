@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Animated, Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Animated, Modal, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { C } from '../constants/colors';
 import { useCart } from '../store/cart';
@@ -142,7 +142,7 @@ export default function ConfirmScreen() {
   if (orderStatus === 'cancelled') {
     return (
       <SafeAreaView style={s.root} edges={['top', 'bottom']}>
-        <View style={s.container}>
+        <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
           <View style={s.cancelledHero}>
             <Text style={{ fontSize: 72, marginBottom: 16 }}>🚫</Text>
             <Text style={[s.title, { color: C.error, fontSize: 28 }]}>Order Cancelled</Text>
@@ -159,7 +159,7 @@ export default function ConfirmScreen() {
               <Text style={s.ctaBtnText}>Back to Menu</Text>
             </LinearGradient>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -170,7 +170,7 @@ export default function ConfirmScreen() {
       {/* Ambient glow background */}
       <View style={s.glowBg} />
 
-      <View style={[s.container, isWeb && s.containerWeb]}>
+      <ScrollView contentContainerStyle={[s.container, isWeb && s.containerWeb]} showsVerticalScrollIndicator={false}>
 
         {/* ── Elegant Icon ─────────────────────────────────────────────── */}
         <Animated.View style={[s.iconRing, { transform: [{ scale: Animated.multiply(iconScale, pulse) }] }]}>
@@ -240,7 +240,7 @@ export default function ConfirmScreen() {
           )}
 
         </Animated.View>
-      </View>
+      </ScrollView>
 
       {/* ── Cancel Modal ────────────────────────────────────────────────── */}
       <Modal visible={showCancelModal} transparent animationType="fade">
