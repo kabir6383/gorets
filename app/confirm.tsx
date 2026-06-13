@@ -4,9 +4,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Animated, Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { C } from '../constants/colors';
-import { API_BASE_URL } from '../constants/menu';
 import { useCart } from '../store/cart';
 import { supabase } from '../utils/supabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ConfirmScreen() {
   const router = useRouter();
@@ -73,10 +73,14 @@ export default function ConfirmScreen() {
           return;
         }
 
-        const res = await fetch(`${API_BASE_URL}/api/orders/${orderId}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.status) setOrderStatus(data.status);
+        // Fallback to AsyncStorage
+        const offlineStr = await AsyncStorage.getItem('offline_orders');
+        if (offlineStr) {
+          const offlineOrders = JSON.parse(offlineStr);
+          const localOrder = offlineOrders.find((o: any) => o.id === orderId);
+          if (localOrder && localOrder.status) {
+            setOrderStatus(localOrder.status);
+          }
         }
       } catch (err) {}
     };
@@ -109,18 +113,21 @@ export default function ConfirmScreen() {
         removeOrderId(orderId);
         setShowCancelModal(false);
       } else {
-        const res = await fetch(`${API_BASE_URL}/api/orders/${orderId}/status`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'cancelled', reason: cancelReason })
-        });
-        if (res.ok) {
-          setOrderStatus('cancelled');
-          removeOrderId(orderId);
-          setShowCancelModal(false);
-        } else {
-          Alert.alert('Error', 'Failed to cancel order.');
+        // Fallback to updating local storage
+        const offlineStr = await AsyncStorage.getItem('offline_orders');
+        if (offlineStr) {
+          let offlineOrders = JSON.parse(offlineStr);
+          const idx = offlineOrders.findIndex((o: any) => o.id === orderId);
+          if (idx !== -1) {
+            offlineOrders[idx].status = 'cancelled';
+            await AsyncStorage.setItem('offline_orders', JSON.stringify(offlineOrders));
+            setOrderStatus('cancelled');
+            removeOrderId(orderId);
+            setShowCancelModal(false);
+            return;
+          }
         }
+        Alert.alert('Error', 'Failed to cancel order.');
       }
     } catch (err) {
       // If the backend is offline, simulate a successful cancellation for the UX

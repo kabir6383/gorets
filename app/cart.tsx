@@ -7,7 +7,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { C } from '../constants/colors';
-import { API_BASE_URL, STATIC_MENU } from '../constants/menu';
+import { STATIC_MENU } from '../constants/menu';
+import { useCart } from '../store/cart';
+import { supabase } from '../utils/supabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCart } from '../store/cart';
 
 // A few popular suggestions shown when cart is empty
@@ -31,14 +34,25 @@ export default function CartScreen() {
     
     const checkStatuses = async () => {
       try {
-        const fetchPromises = myOrders.map(id => 
-          fetch(`${API_BASE_URL}/api/orders/${id}`).then(r => r.json()).catch(() => null)
-        );
-        const results = await Promise.all(fetchPromises);
         const newStatuses: Record<string, string> = {};
-        results.forEach((data, idx) => {
-          if (data && data.status) newStatuses[myOrders[idx]] = data.status;
-        });
+        
+        // Check Supabase
+        const { data, error } = await supabase.from('orders').select('id, status').in('id', myOrders);
+        if (!error && data) {
+          data.forEach(d => { newStatuses[d.id] = d.status; });
+        }
+        
+        // Check local fallback
+        const offlineStr = await AsyncStorage.getItem('offline_orders');
+        if (offlineStr) {
+          const offlineOrders = JSON.parse(offlineStr);
+          offlineOrders.forEach((offO: any) => {
+            if (!newStatuses[offO.id]) {
+              newStatuses[offO.id] = offO.status;
+            }
+          });
+        }
+        
         setOrderStatuses(newStatuses);
       } catch {}
     };

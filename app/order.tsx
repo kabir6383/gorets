@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { C } from '../constants/colors';
-import { API_BASE_URL } from '../constants/menu';
+
 import { useCart } from '../store/cart';
 import { supabase } from '../utils/supabase';
 

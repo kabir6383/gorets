@@ -38,8 +38,6 @@ export const CAT_ICONS: Record<string, string> = {
   'HOT BEVERAGES': '🫖',
 };
 
-export const API_BASE_URL = 'http://192.168.29.168:5000';
-
 // ── Static Menu Data (fallback if backend is offline) ─────────────────────────
 export const STATIC_MENU: MenuItem[] = [
   { id: 'm1',  name: 'FRENCH FRIES ( SALTED )',        category: 'CLASSIC APPETIZERS',       price: 129, image: 'https://media.dodostatic.com/image/r:520x520/019cc42473d779a08d1c544fb74bae39.jpg', tags: [] },

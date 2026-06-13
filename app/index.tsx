@@ -20,8 +20,9 @@ import CartFAB from '../components/CartFAB';
 import CategoryPill from '../components/CategoryPill';
 import MenuCard from '../components/MenuCard';
 import { C } from '../constants/colors';
-import { API_BASE_URL, CAT_ICONS, MenuItem, STATIC_MENU } from '../constants/menu';
+import { CAT_ICONS, MenuItem, STATIC_MENU } from '../constants/menu';
 import { useCart } from '../store/cart';
+import { supabase } from '../utils/supabase';
 
 const { width: SW } = Dimensions.get('window');
 const NUM_COLS = SW > 600 ? 3 : 2;
@@ -65,11 +66,15 @@ export default function MenuScreen() {
       } catch (e) {}
 
       try {
-        const controller = new AbortController();
-        const r = await fetch(`${API_BASE_URL}/api/menu`, { signal: controller.signal });
-        const data = await r.json();
-        if (Array.isArray(data) && data.length > 0) setMenuItems(data);
-      } catch (e) {}
+        const { data, error } = await supabase.from('menu').select('*');
+        if (!error && data && data.length > 0) {
+          setMenuItems(data);
+        } else {
+          setMenuItems(STATIC_MENU);
+        }
+      } catch (e) {
+        setMenuItems(STATIC_MENU);
+      }
       
       setLoading(false);
     };
