@@ -6,41 +6,60 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { C } from '../constants/colors';
 import { useAuth } from '../store/auth';
+import { auth, db } from '../utils/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { ref, get } from 'firebase/database';
 
 export default function LoginScreen() {
   const router = useRouter();
   const { login } = useAuth();
   
-  const [step, setStep] = useState<'phone' | 'otp'>('phone');
-  const [phone, setPhone] = useState('');
-  const [otp, setOtp] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSendOtp = () => {
-    if (phone.length < 10) return;
+  const handleLogin = async () => {
+    if (!username.trim() || !password) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setLoading(true);
-    // Simulate network delay for sending OTP
-    setTimeout(() => {
-      setLoading(false);
-      setStep('otp');
-    }, 1000);
-  };
 
-  const handleVerifyOtp = async () => {
-    if (otp.length < 4) return;
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setLoading(true);
-    // Simulate network delay for verification
-    setTimeout(async () => {
-      await login(phone);
-      setLoading(false);
-      if (router.canGoBack()) {
-        router.back();
+    try {
+      const email = username.includes('@') ? username.trim().toLowerCase() : `${username.trim().toLowerCase()}@gorets.app`;
+      
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
+      
+      const snap = await get(ref(db, 'users/' + userCred.user.uid));
+      if (snap.exists()) {
+        const profile = snap.val();
+        await login(profile.phone || 'no_phone', profile.name || username.trim(), profile.role || 'customer');
+        if (profile.role === 'admin') router.replace('/admin' as any);
+        else if (profile.role === 'kitchen') router.replace('/kitchen' as any);
+        else if (profile.role === 'driver') router.replace('/driver' as any);
+        else router.replace('/');
       } else {
-        router.replace('/');
+        // Handle Role-based routing fallback if no RTDB profile exists
+        if (email === 'gorets@admin.com') {
+          await login('admin_phone', 'Store Admin', 'admin');
+          router.replace('/admin' as any);
+        } else if (email === 'kitchen@gorets.com') {
+          await login('kitchen_phone', 'Kitchen Staff', 'kitchen');
+          router.replace('/kitchen' as any);
+        } else if (email === 'driver@gorets.com') {
+          await login('driver_phone', 'Delivery Driver', 'driver');
+          router.replace('/driver' as any);
+        } else {
+          await login('customer_phone', username.trim(), 'customer');
+          router.replace('/');
+        }
       }
-    }, 1200);
+      
+    } catch (err: any) {
+      console.error(err);
+      alert(`Login Error: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,7 +69,7 @@ export default function LoginScreen() {
         {/* Header */}
         <View style={s.header}>
           <TouchableOpacity 
-            onPress={() => step === 'otp' ? setStep('phone') : router.back()} 
+            onPress={() => router.replace('/')} 
             style={s.backCircle} 
             activeOpacity={0.7}
           >
@@ -61,75 +80,52 @@ export default function LoginScreen() {
         <View style={s.content}>
           <View style={s.hero}>
             <Text style={s.logo}>GORET'S</Text>
-            <Text style={s.title}>{step === 'phone' ? "Let's get started" : "Verify details"}</Text>
-            <Text style={s.subtitle}>
-              {step === 'phone' 
-                ? "Enter your mobile number to log in or create an account." 
-                : `We've sent a code to ${phone}. Enter it below.`}
-            </Text>
+            <Text style={s.title}>Welcome back</Text>
+            <Text style={s.subtitle}>Log in with your username and password.</Text>
           </View>
 
-          {step === 'phone' ? (
-            <View style={s.inputContainer}>
-              <View style={s.phonePrefix}>
-                <Text style={s.prefixText}>+91</Text>
-              </View>
-              <TextInput
-                style={s.input}
-                placeholder="Mobile Number"
-                placeholderTextColor={C.textMuted}
-                keyboardType="phone-pad"
-                maxLength={10}
-                value={phone}
-                onChangeText={setPhone}
-                autoFocus
-              />
-            </View>
-          ) : (
-            <View style={s.inputContainer}>
-              <TextInput
-                style={[s.input, { textAlign: 'center', fontSize: 24, letterSpacing: 8 }]}
-                placeholder="------"
-                placeholderTextColor={C.textMuted}
-                keyboardType="number-pad"
-                maxLength={6}
-                value={otp}
-                onChangeText={setOtp}
-                autoFocus
-              />
-            </View>
-          )}
+          <View style={s.inputContainer}>
+            <TextInput
+              style={s.inputFull}
+              placeholder="Username or Email"
+              placeholderTextColor={C.textMuted}
+              value={username}
+              onChangeText={setUsername}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+          </View>
 
-          {step === 'otp' && (
-            <Text style={s.resendText}>Didn't receive code? <Text style={s.resendLink}>Resend</Text></Text>
-          )}
+          <View style={s.inputContainer}>
+            <TextInput
+              style={s.inputWithIcon}
+              placeholder="Password"
+              placeholderTextColor={C.textMuted}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+            />
+            <TouchableOpacity style={s.eyeBtn} onPress={() => setShowPassword(v => !v)}>
+              <Text style={s.eyeIcon}>{showPassword ? '🙈' : '👁️'}</Text>
+            </TouchableOpacity>
+          </View>
 
+          <TouchableOpacity onPress={() => router.push('/register')} style={s.registerLink}>
+            <Text style={s.registerText}>Don't have an account? <Text style={s.registerHighlight}>Register here</Text></Text>
+          </TouchableOpacity>
         </View>
 
         <View style={s.footer}>
-          {step === 'phone' ? (
-            <TouchableOpacity 
-              style={[s.btn, phone.length < 10 && s.btnDisabled]} 
-              onPress={handleSendOtp}
-              disabled={phone.length < 10 || loading}
-              activeOpacity={0.8}
-            >
-              <LinearGradient colors={phone.length < 10 ? [C.surfaceHigh, C.surfaceHigh] : [C.accent, C.accentDark]} style={s.btnGrad}>
-                {loading ? <ActivityIndicator color="#fff" /> : <Text style={s.btnText}>Continue</Text>}
-              </LinearGradient>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity 
-              style={[s.btn, otp.length < 4 && s.btnDisabled]} 
-              onPress={handleVerifyOtp}
-              disabled={otp.length < 4 || loading}
-              activeOpacity={0.8}
-            >
-              <LinearGradient colors={otp.length < 4 ? [C.surfaceHigh, C.surfaceHigh] : [C.accent, C.accentDark]} style={s.btnGrad}>
-                {loading ? <ActivityIndicator color="#fff" /> : <Text style={s.btnText}>Verify and Login</Text>}
-              </LinearGradient>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity 
+            style={[s.btn, (!username.trim() || !password) && s.btnDisabled]} 
+            onPress={handleLogin}
+            disabled={!username.trim() || !password || loading}
+            activeOpacity={0.8}
+          >
+            <LinearGradient colors={!username.trim() || !password ? [C.surfaceHigh, C.surfaceHigh] : [C.accent, C.accentDark]} style={s.btnGrad}>
+              {loading ? <ActivityIndicator color="#fff" /> : <Text style={s.btnText}>Log In</Text>}
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
 
       </KeyboardAvoidingView>
@@ -154,26 +150,33 @@ const s = StyleSheet.create({
   title: { color: C.text, fontSize: 28, fontFamily: 'Outfit_800ExtraBold', marginBottom: 8 },
   subtitle: { color: C.textSec, fontSize: 15, fontFamily: 'Outfit_400Regular', lineHeight: 22 },
 
-  inputContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
-  phonePrefix: {
+  inputContainer: { marginBottom: 16, position: 'relative' },
+  inputFull: {
+    width: '100%', height: 56,
     backgroundColor: C.surfaceHigh,
-    height: 54, paddingHorizontal: 16,
-    justifyContent: 'center',
-    borderTopLeftRadius: 14, borderBottomLeftRadius: 14,
-    borderWidth: 1, borderRightWidth: 0, borderColor: C.border,
-  },
-  prefixText: { color: C.textSec, fontFamily: 'Outfit_700Bold', fontSize: 16 },
-  input: {
-    flex: 1, height: 54,
-    backgroundColor: C.surfaceHigh,
-    color: C.text, fontSize: 18, fontFamily: 'Outfit_600SemiBold',
-    borderTopRightRadius: 14, borderBottomRightRadius: 14,
+    color: C.text, fontSize: 16, fontFamily: 'Outfit_600SemiBold',
+    borderRadius: 14,
     borderWidth: 1, borderColor: C.border,
     paddingHorizontal: 16,
   },
+  inputWithIcon: {
+    width: '100%', height: 56,
+    backgroundColor: C.surfaceHigh,
+    color: C.text, fontSize: 16, fontFamily: 'Outfit_600SemiBold',
+    borderRadius: 14,
+    borderWidth: 1, borderColor: C.border,
+    paddingHorizontal: 16,
+    paddingRight: 52,
+  },
+  eyeBtn: {
+    position: 'absolute', right: 14, top: 0, bottom: 0,
+    justifyContent: 'center', alignItems: 'center', width: 36,
+  },
+  eyeIcon: { fontSize: 18 },
   
-  resendText: { color: C.textMuted, textAlign: 'center', fontFamily: 'Outfit_400Regular', fontSize: 14 },
-  resendLink: { color: C.accent, fontFamily: 'Outfit_700Bold' },
+  registerLink: { marginTop: 8, paddingVertical: 10, alignItems: 'center' },
+  registerText: { color: C.textSec, fontFamily: 'Outfit_500Medium', fontSize: 14 },
+  registerHighlight: { color: C.accent, fontFamily: 'Outfit_800ExtraBold' },
 
   footer: { padding: 20, paddingBottom: Platform.OS === 'ios' ? 40 : 20 },
   btn: { borderRadius: 16, overflow: 'hidden' },

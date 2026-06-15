@@ -23,7 +23,8 @@ import { C } from '../constants/colors';
 import { CAT_ICONS, MenuItem, STATIC_MENU } from '../constants/menu';
 import { useCart } from '../store/cart';
 import { useAuth } from '../store/auth';
-import { supabase } from '../utils/supabase';
+import { db } from '../utils/firebase';
+import { ref, get } from 'firebase/database';
 
 const { width: SW } = Dimensions.get('window');
 const NUM_COLS = SW > 600 ? 3 : 2;
@@ -68,9 +69,28 @@ export default function MenuScreen() {
       } catch (e) {}
 
       try {
-        const { data, error } = await supabase.from('menu').select('*');
-        if (!error && data && data.length > 0) {
-          setMenuItems(data);
+        const snapshot = await get(ref(db, 'menu'));
+        if (snapshot.exists()) {
+          const val = snapshot.val();
+          // Menu can be structured as { category: { itemId: {...} } } or flat array
+          let items: any[] = [];
+          const firstVal = Object.values(val)[0];
+          if (firstVal && typeof firstVal === 'object' && !Array.isArray(firstVal) && !('name' in firstVal)) {
+            // Nested structure: { category: { id: { name, price, ... } } }
+            Object.keys(val).forEach(cat => {
+              Object.keys(val[cat]).forEach(id => {
+                items.push({ id, category: cat, ...val[cat][id] });
+              });
+            });
+          } else {
+            // Flat structure: { id: { name, price, category, ... } }
+            items = Object.keys(val).map(key => ({ id: key, ...val[key] }));
+          }
+          if (items.length > 0) {
+            setMenuItems(items as any);
+          } else {
+            setMenuItems(STATIC_MENU);
+          }
         } else {
           setMenuItems(STATIC_MENU);
         }

@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ActivityIndicator, Alert, KeyboardAvoidingView, Platform,
   ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View,
@@ -12,7 +12,8 @@ import { C } from '../constants/colors';
 
 import { useCart } from '../store/cart';
 import { useAuth } from '../store/auth';
-import { supabase } from '../utils/supabase';
+import { db } from '../utils/firebase';
+import { ref, set } from 'firebase/database';
 
 type DiningMode = 'dine-in' | 'takeaway';
 type PaymentMethod = 'cash' | 'upi';
@@ -20,7 +21,13 @@ type PaymentMethod = 'cash' | 'upi';
 export default function OrderScreen() {
   const router = useRouter();
   const { cartItems, cartTotal, cartCount, clearCart, addOrderId, deviceId } = useCart();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace('/login');
+    }
+  }, [loading, user]);
 
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState(user?.phone || '');
@@ -29,6 +36,9 @@ export default function OrderScreen() {
   const [addressLine1, setAddressLine1] = useState('');
   const [addressLine2, setAddressLine2] = useState('');
   const [landmark, setLandmark] = useState('');
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
+    user?.addresses && user.addresses.length > 0 ? user.addresses[0].id : null
+  );
   const [payment, setPayment] = useState<PaymentMethod>('cash');
   const [placing, setPlacing] = useState(false);
 
@@ -38,7 +48,17 @@ export default function OrderScreen() {
   const placeOrder = async () => {
     if (!name.trim()) return Alert.alert('Required', 'Please enter your name');
     if (!phone.trim() || phone.length < 10) return Alert.alert('Required', 'Enter a valid 10-digit phone number');
-    if (diningMode === 'takeaway' && !addressLine1.trim()) return Alert.alert('Required', 'Please enter your delivery address');
+    
+    let finalAddress = '';
+    if (diningMode === 'takeaway') {
+      if (selectedAddressId) {
+        const addr = user?.addresses?.find(a => a.id === selectedAddressId);
+        if (addr) finalAddress = [addr.line1, addr.line2, addr.landmark].filter(Boolean).join(', ');
+      } else {
+        finalAddress = [addressLine1.trim(), addressLine2.trim(), landmark.trim()].filter(Boolean).join(', ');
+      }
+      if (!finalAddress) return Alert.alert('Required', 'Please enter your delivery address');
+    }
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setPlacing(true);
@@ -57,22 +77,20 @@ export default function OrderScreen() {
         payment_method: payment,
         dining_mode: diningMode,
         table_number: diningMode === 'dine-in' ? tableNo : null,
-        delivery_address: diningMode === 'takeaway'
-          ? [addressLine1.trim(), addressLine2.trim(), landmark.trim()].filter(Boolean).join(', ')
-          : null,
+        delivery_address: finalAddress || null,
       };
 
-      const { error } = await supabase.from('orders').insert([{
-        id: orderId,
-        user_id: user?.id || deviceId,
-        customer_name: payload.customer_name,
-        customer_phone: payload.customer_phone,
-        items: payload.items,
-        total: payload.total,
-        status: 'placed'
-      }]);
-
-      if (error) {
+      try {
+        await set(ref(db, 'orders/' + orderId), {
+          id: orderId,
+          user_id: user?.id || deviceId,
+          customer_name: payload.customer_name,
+          customer_phone: payload.customer_phone,
+          items: payload.items,
+          total: payload.total,
+          status: 'placed'
+        });
+      } catch (error: any) {
         console.log('Supabase insert failed, saving to local offline storage:', error.message);
         
         // Save to local offline storage
@@ -224,35 +242,66 @@ export default function OrderScreen() {
               <View style={s.addressBlock}>
                 <View style={s.addressBanner}>
                   <Text style={s.addressBannerIcon}>🚗</Text>
-                  <Text style={s.addressBannerText}>Enter delivery address</Text>
+                  <Text style={s.addressBannerText}>Delivery address</Text>
                 </View>
-                <Text style={[s.inputLabel, { marginTop: 4 }]}>Street / Area *</Text>
-                <TextInput
-                  style={s.input}
-                  placeholder="e.g. 12, Anna Nagar, Chennai"
-                  placeholderTextColor={C.textMuted}
-                  value={addressLine1}
-                  onChangeText={setAddressLine1}
-                  returnKeyType="next"
-                />
-                <Text style={s.inputLabel}>Apartment / Floor (optional)</Text>
-                <TextInput
-                  style={s.input}
-                  placeholder="e.g. Flat 3B, 2nd Floor"
-                  placeholderTextColor={C.textMuted}
-                  value={addressLine2}
-                  onChangeText={setAddressLine2}
-                  returnKeyType="next"
-                />
-                <Text style={s.inputLabel}>Landmark (optional)</Text>
-                <TextInput
-                  style={[s.input, { marginBottom: 0 }]}
-                  placeholder="e.g. Near Bus Stand"
-                  placeholderTextColor={C.textMuted}
-                  value={landmark}
-                  onChangeText={setLandmark}
-                  returnKeyType="done"
-                />
+
+                {user?.addresses && user.addresses.length > 0 && (
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 16 }}>
+                    <View style={{ flexDirection: 'row', gap: 10 }}>
+                      {user.addresses.map(addr => (
+                        <TouchableOpacity 
+                          key={addr.id} 
+                          style={[s.savedAddrCard, selectedAddressId === addr.id && s.savedAddrCardActive]}
+                          onPress={() => setSelectedAddressId(addr.id)}
+                          activeOpacity={0.8}
+                        >
+                          <Text style={[s.savedAddrType, selectedAddressId === addr.id && { color: C.accent }]}>{addr.type}</Text>
+                          <Text style={s.savedAddrLine1} numberOfLines={1}>{addr.line1}</Text>
+                        </TouchableOpacity>
+                      ))}
+                      <TouchableOpacity 
+                        style={[s.savedAddrCard, selectedAddressId === null && s.savedAddrCardActive]}
+                        onPress={() => setSelectedAddressId(null)}
+                        activeOpacity={0.8}
+                      >
+                        <Text style={[s.savedAddrType, selectedAddressId === null && { color: C.accent }]}>Other</Text>
+                        <Text style={s.savedAddrLine1}>Enter manually</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </ScrollView>
+                )}
+
+                {(!user?.addresses || user.addresses.length === 0 || selectedAddressId === null) && (
+                  <View>
+                    <Text style={[s.inputLabel, { marginTop: 4 }]}>Street / Area *</Text>
+                    <TextInput
+                      style={s.input}
+                      placeholder="e.g. 12, Anna Nagar, Chennai"
+                      placeholderTextColor={C.textMuted}
+                      value={addressLine1}
+                      onChangeText={setAddressLine1}
+                      returnKeyType="next"
+                    />
+                    <Text style={s.inputLabel}>Apartment / Floor (optional)</Text>
+                    <TextInput
+                      style={s.input}
+                      placeholder="e.g. Flat 3B, 2nd Floor"
+                      placeholderTextColor={C.textMuted}
+                      value={addressLine2}
+                      onChangeText={setAddressLine2}
+                      returnKeyType="next"
+                    />
+                    <Text style={s.inputLabel}>Landmark (optional)</Text>
+                    <TextInput
+                      style={[s.input, { marginBottom: 0 }]}
+                      placeholder="e.g. Near Bus Stand"
+                      placeholderTextColor={C.textMuted}
+                      value={landmark}
+                      onChangeText={setLandmark}
+                      returnKeyType="done"
+                    />
+                  </View>
+                )}
               </View>
             )}
           </View>
@@ -427,6 +476,21 @@ const s = StyleSheet.create({
   },
   addressBannerIcon: { fontSize: 16 },
   addressBannerText: { color: C.accent, fontSize: 13, fontFamily: 'Outfit_600SemiBold' },
+
+  savedAddrCard: {
+    width: 140,
+    backgroundColor: C.surfaceHigh,
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1.5,
+    borderColor: C.border,
+  },
+  savedAddrCardActive: {
+    backgroundColor: 'rgba(245,158,11,0.08)',
+    borderColor: C.accent,
+  },
+  savedAddrType: { color: C.textSec, fontSize: 12, fontFamily: 'Outfit_700Bold', textTransform: 'uppercase', marginBottom: 4 },
+  savedAddrLine1: { color: C.text, fontSize: 13, fontFamily: 'Outfit_500Medium' },
 
   footer: {
     position: 'absolute', bottom: 0, left: 0, right: 0,

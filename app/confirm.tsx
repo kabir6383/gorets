@@ -1,11 +1,13 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Animated, Modal, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { C } from '../constants/colors';
 import { useCart } from '../store/cart';
-import { supabase } from '../utils/supabase';
+import { db } from '../utils/firebase';
+import { ref, get, update } from 'firebase/database';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ConfirmScreen() {
@@ -14,10 +16,13 @@ export default function ConfirmScreen() {
   const { removeOrderId } = useCart();
 
   const [orderStatus, setOrderStatus] = useState('placed');
+  const [orderData, setOrderData] = useState<any>(null);
   const [cancelling, setCancelling] = useState(false);
   const [canCancel, setCanCancel] = useState(true);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState<string | null>(null);
+  const [rating, setRating] = useState(0);
+  const [countdown, setCountdown] = useState('');
 
   const CANCEL_REASONS = [
     'Ordered by mistake',
@@ -65,11 +70,13 @@ export default function ConfirmScreen() {
 
     // Poll for live order status
     const pollStatus = async () => {
-      if (!orderId) return; 
+      if (!orderId) return;
       try {
-        const { data: supaData, error } = await supabase.from('orders').select('status').eq('id', orderId).single();
-        if (supaData && !error) {
-          setOrderStatus(supaData.status);
+        const docSnap = await get(ref(db, 'orders/' + orderId));
+        const data = docSnap.exists() ? docSnap.val() : null;
+        if (data && data.status) {
+          setOrderStatus(data.status);
+          setOrderData(data);
           return;
         }
 
@@ -94,41 +101,38 @@ export default function ConfirmScreen() {
     };
   }, [orderId]);
 
+  // Live countdown based on estimated_ready_at
+  useEffect(() => {
+    if (orderStatus !== 'preparing' || !orderData?.estimated_ready_at) return;
+    const tick = () => {
+      const remaining = orderData.estimated_ready_at - Date.now();
+      if (remaining <= 0) { setCountdown('Ready soon!'); return; }
+      const mins = Math.floor(remaining / 60000);
+      const secs = Math.floor((remaining % 60000) / 1000);
+      setCountdown(`${mins}m ${secs}s`);
+    };
+    tick();
+    const t = setInterval(tick, 1000);
+    return () => clearInterval(t);
+  }, [orderStatus, orderData]);
+
   const isWeb = Platform.OS === 'web';
 
   const STEPS = [
-    { label: 'Order Received', desc: 'We have received your order' },
-    { label: 'Preparing', desc: 'Your food is being prepared' },
-    { label: 'Ready', desc: 'Collect at the counter' },
+    { label: 'Order Received', desc: 'Kitchen has received your order' },
+    { label: 'Accepted & Preparing', desc: 'Your food is being freshly prepared' },
+    { label: 'Ready', desc: 'Your order is ready! Please collect.' },
   ];
 
   const handleConfirmCancel = async () => {
     if (!cancelReason) return;
     setCancelling(true);
     try {
-      const { error } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', orderId);
+      await update(ref(db, 'orders/' + orderId), { status: 'cancelled' });
       
-      if (!error) {
-        setOrderStatus('cancelled');
-        removeOrderId(orderId);
-        setShowCancelModal(false);
-      } else {
-        // Fallback to updating local storage
-        const offlineStr = await AsyncStorage.getItem('offline_orders');
-        if (offlineStr) {
-          let offlineOrders = JSON.parse(offlineStr);
-          const idx = offlineOrders.findIndex((o: any) => o.id === orderId);
-          if (idx !== -1) {
-            offlineOrders[idx].status = 'cancelled';
-            await AsyncStorage.setItem('offline_orders', JSON.stringify(offlineOrders));
-            setOrderStatus('cancelled');
-            removeOrderId(orderId);
-            setShowCancelModal(false);
-            return;
-          }
-        }
-        Alert.alert('Error', 'Failed to cancel order.');
-      }
+      setOrderStatus('cancelled');
+      removeOrderId(orderId);
+      setShowCancelModal(false);
     } catch (err) {
       // If the backend is offline, simulate a successful cancellation for the UX
       setOrderStatus('cancelled');
@@ -139,21 +143,36 @@ export default function ConfirmScreen() {
     }
   };
 
+  const submitRating = async (r: number) => {
+    setRating(r);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    try {
+      await update(ref(db, 'orders/' + orderId), { rating: r });
+    } catch (err) {}
+  };
+
   if (orderStatus === 'cancelled') {
+    const wasRejected = orderData?.rejection_reason;
     return (
       <SafeAreaView style={s.root} edges={['top', 'bottom']}>
         <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
           <View style={s.cancelledHero}>
-            <Text style={{ fontSize: 72, marginBottom: 16 }}>🚫</Text>
-            <Text style={[s.title, { color: C.error, fontSize: 28 }]}>Order Cancelled</Text>
-            <Text style={s.subtitle}>Your order #{orderId} has been successfully cancelled.</Text>
+            <Text style={{ fontSize: 72, marginBottom: 16 }}>{wasRejected ? '😔' : '🚫'}</Text>
+            <Text style={[s.title, { color: C.error, fontSize: 28 }]}>
+              {wasRejected ? 'Order Rejected' : 'Order Cancelled'}
+            </Text>
+            <Text style={s.subtitle}>
+              {wasRejected
+                ? 'Sorry, the kitchen could not accept your order right now. No charges were applied.'
+                : `Your order #${orderId} has been successfully cancelled.`}
+            </Text>
           </View>
-          
+
           <View style={s.refundCard}>
             <Text style={s.refundTitle}>Refund Status</Text>
             <Text style={s.refundText}>No charges were applied since the restaurant had not started preparing your food yet.</Text>
           </View>
-          
+
           <TouchableOpacity onPress={() => router.replace('/')} style={[s.ctaBtn, { marginTop: 20 }]}>
             <LinearGradient colors={[C.accent, C.accentDark]} style={s.ctaGrad}>
               <Text style={s.ctaBtnText}>Back to Menu</Text>
@@ -201,26 +220,55 @@ export default function ConfirmScreen() {
           {/* Vertical Timeline */}
           <View style={s.timelineCard}>
             {STEPS.map((step, i) => {
-              const isDone = i === 0 || 
+              const isDone = i === 0 ||
                 (i === 1 && (orderStatus === 'preparing' || orderStatus === 'ready' || orderStatus === 'completed')) ||
                 (i === 2 && (orderStatus === 'ready' || orderStatus === 'completed'));
-              
+              const isActive = (i === 1 && orderStatus === 'preparing');
+
               return (
                 <View key={i} style={s.timelineStep}>
                   <View style={s.timelineLeft}>
                     <View style={[s.timelineDot, isDone && s.timelineDotDone]}>
-                       {isDone && <Text style={s.timelineDotCheck}>✓</Text>}
+                      {isDone && <Text style={s.timelineDotCheck}>✓</Text>}
                     </View>
                     {i < STEPS.length - 1 && <View style={[s.timelineLine, isDone && s.timelineLineDone]} />}
                   </View>
                   <View style={s.timelineContent}>
                     <Text style={[s.timelineLabel, isDone && s.timelineLabelDone]}>{step.label}</Text>
                     <Text style={s.timelineSub}>{step.desc}</Text>
+                    {/* Show live countdown when this step is active */}
+                    {isActive && countdown ? (
+                      <View style={s.countdownBox}>
+                        <Text style={s.countdownText}>⏱ Est. ready in {countdown}</Text>
+                      </View>
+                    ) : null}
                   </View>
                 </View>
               );
             })}
           </View>
+
+          {/* Rating Section (Visible only when completed) */}
+          {orderStatus === 'completed' && (
+            <View style={s.ratingCard}>
+              <Text style={s.ratingTitle}>How was your experience?</Text>
+              <Text style={s.ratingSub}>Rate your order to help us improve</Text>
+              <View style={s.starsRow}>
+                {[1, 2, 3, 4, 5].map(star => (
+                  <TouchableOpacity 
+                    key={star} 
+                    onPress={() => submitRating(star)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[s.starIcon, rating >= star ? s.starActive : s.starInactive]}>
+                      ★
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              {rating > 0 && <Text style={s.ratingThanks}>Thank you for your feedback!</Text>}
+            </View>
+          )}
 
           {/* Actions */}
           <TouchableOpacity style={s.primaryBtn} onPress={() => router.replace('/')} activeOpacity={0.85}>
@@ -336,6 +384,17 @@ const s = StyleSheet.create({
   timelineLabel: { color: C.textSec, fontSize: 15, fontFamily: 'Outfit_600SemiBold', marginBottom: 2 },
   timelineLabelDone: { color: C.text, fontFamily: 'Outfit_800ExtraBold' },
   timelineSub: { color: C.textMuted, fontSize: 12, fontFamily: 'Outfit_400Regular' },
+  countdownBox: { marginTop: 8, backgroundColor: 'rgba(245,158,11,0.1)', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 6, alignSelf: 'flex-start', borderWidth: 1, borderColor: 'rgba(245,158,11,0.3)' },
+  countdownText: { color: C.accent, fontSize: 13, fontFamily: 'Outfit_800ExtraBold' },
+
+  ratingCard: { width: '100%', backgroundColor: C.surfaceHigh, borderRadius: 16, padding: 20, alignItems: 'center', marginBottom: 24, borderWidth: 1, borderColor: C.border },
+  ratingTitle: { color: C.text, fontSize: 16, fontFamily: 'Outfit_800ExtraBold', marginBottom: 4 },
+  ratingSub: { color: C.textMuted, fontSize: 13, fontFamily: 'Outfit_500Medium', marginBottom: 16 },
+  starsRow: { flexDirection: 'row', gap: 12 },
+  starIcon: { fontSize: 36 },
+  starActive: { color: '#f59e0b' },
+  starInactive: { color: C.border },
+  ratingThanks: { color: C.success, fontSize: 13, fontFamily: 'Outfit_700Bold', marginTop: 12 },
 
   primaryBtn: { width: '100%', backgroundColor: C.accent, borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginBottom: 8 },
   primaryBtnText: { color: '#fff', fontFamily: 'Outfit_800ExtraBold', fontSize: 16 },

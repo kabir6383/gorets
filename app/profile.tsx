@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -15,10 +15,13 @@ export default function ProfileScreen() {
   const [isEditing, setIsEditing] = useState(false);
 
   // If somehow not logged in, redirect
-  if (!user) {
-    router.replace('/login');
-    return null;
-  }
+  useEffect(() => {
+    if (!user) {
+      router.replace('/login');
+    }
+  }, [user]);
+
+  if (!user) return null;
 
   const handleSaveName = async () => {
     await updateName(nameInput);
@@ -88,16 +91,17 @@ export default function ProfileScreen() {
         <View style={s.linkGroup}>
           <TouchableOpacity 
             style={s.linkRow} 
-            onPress={() => router.push('/cart')}
+            onPress={() => router.push('/history')}
             activeOpacity={0.7}
           >
             <View style={s.linkIconWrap}><Text>📜</Text></View>
-            <Text style={s.linkText}>My Orders</Text>
+            <Text style={s.linkText}>Order History</Text>
             <Text style={s.linkArrow}>→</Text>
           </TouchableOpacity>
           <View style={s.divider} />
           <TouchableOpacity 
             style={s.linkRow} 
+            onPress={() => router.push('/addresses')}
             activeOpacity={0.7}
           >
             <View style={s.linkIconWrap}><Text>📍</Text></View>

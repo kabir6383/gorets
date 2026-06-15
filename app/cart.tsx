@@ -8,9 +8,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { C } from '../constants/colors';
 import { STATIC_MENU } from '../constants/menu';
-import { supabase } from '../utils/supabase';
+import { db } from '../utils/firebase';
+import { ref, get } from 'firebase/database';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCart } from '../store/cart';
+import { useAuth } from '../store/auth';
 
 // A few popular suggestions shown when cart is empty
 const SUGGESTIONS = STATIC_MENU.slice(0, 6);
@@ -18,6 +20,7 @@ const SUGGESTIONS = STATIC_MENU.slice(0, 6);
 export default function CartScreen() {
   const router = useRouter();
   const { cartItems, cartCount, cartTotal, addToCart, removeFromCart, clearCart, myOrders } = useCart();
+  const { user } = useAuth();
   const [orderStatuses, setOrderStatuses] = useState<Record<string, string>>({});
 
   const tax = Math.round(cartTotal * 0.05);
@@ -35,11 +38,15 @@ export default function CartScreen() {
       try {
         const newStatuses: Record<string, string> = {};
         
-        // Check Supabase
-        const { data, error } = await supabase.from('orders').select('id, status').in('id', myOrders);
-        if (!error && data) {
-          data.forEach(d => { newStatuses[d.id] = d.status; });
-        }
+        // Check Realtime Database
+        const promises = myOrders.map(id => get(ref(db, 'orders/' + id)));
+        const snapshots = await Promise.all(promises);
+        snapshots.forEach(snap => {
+          if (snap.exists()) {
+            const d = snap.val();
+            newStatuses[d.id] = d.status;
+          }
+        });
         
         // Check local fallback
         const offlineStr = await AsyncStorage.getItem('offline_orders');
@@ -285,7 +292,11 @@ export default function CartScreen() {
         <TouchableOpacity
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            router.push('/order');
+            if (!user) {
+              router.push('/login');
+            } else {
+              router.push('/order');
+            }
           }}
           activeOpacity={0.88}
           style={s.checkoutTouch}

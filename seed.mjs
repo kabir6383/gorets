@@ -1,46 +1,20 @@
-// ── Types ─────────────────────────────────────────────────────────────────────
-export interface MenuItem {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  image: string;
-  tags: string[];
-  available?: boolean;
-}
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set } from "firebase/database";
 
-export interface CartItem extends MenuItem {
-  quantity: number;
-}
-
-// ── Category Icons ────────────────────────────────────────────────────────────
-export const CAT_ICONS: Record<string, string> = {
-  'All': '🍽️',
-  'CLASSIC APPETIZERS': '🍟',
-  "NYC'S SPECIALS": '🍗',
-  'BBQ (6pm-9.30pm)': '🔥',
-  'VEGETARIAN PIZZA': '🌿',
-  'NON-VEGETARIAN PIZZA': '🍕',
-  "GORET'S SPECIAL PIZZA": '⭐',
-  'PASTA': '🍝',
-  'SANDWICH': '🥪',
-  'BURGER': '🍔',
-  'WRAPS': '🌯',
-  'WAFFLE SANDWICH': '🧇',
-  'WAFFLE WITH ICE CREAM': '🍦',
-  'MILKSHAKES': '🥤',
-  'DESSERTS': '🍰',
-  'SUNDAE': '🍨',
-  'FALOODA': '🍹',
-  'MOJITO': '🍋',
-  "GORET'S JIGARTHANDA": '🧊',
-  'FRESH JUICES': '🍊',
-  'HOT CHOCOLATE': '☕',
-  'HOT BEVERAGES': '🫖',
+const firebaseConfig = {
+  apiKey: "AIzaSyCWrjqU7ZqhBIiGuzOQ9755EJ2TsKZ5jMM",
+  authDomain: "gorets-2cfda.firebaseapp.com",
+  projectId: "gorets-2cfda",
+  storageBucket: "gorets-2cfda.firebasestorage.app",
+  messagingSenderId: "828605157406",
+  appId: "1:828605157406:web:649687db1346f4b7845e0f",
+  databaseURL: "https://gorets-2cfda-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
 
-// ── Static Menu Data (fallback if backend is offline) ─────────────────────────
-export const STATIC_MENU: MenuItem[] = [
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+export const STATIC_MENU = [
   { id: 'm1',  name: 'FRENCH FRIES ( SALTED )',        category: 'CLASSIC APPETIZERS',       price: 129, image: 'https://media.dodostatic.com/image/r:520x520/019cc42473d779a08d1c544fb74bae39.jpg', tags: [] },
   { id: 'm2',  name: "FRENCH FRIES ( HOT'N'SPICY )",  category: 'CLASSIC APPETIZERS',       price: 139, image: 'https://media.dodostatic.com/image/r:520x520/019cc426b20a747cae42dee4f5338092.jpg', tags: [] },
   { id: 'm3',  name: 'GARLIC BREAD',                   category: 'CLASSIC APPETIZERS',       price: 169, image: 'https://media.dodostatic.com/image/r:520x520/019cc46e611e751f84ab08c4db0506a9.jpg', tags: [] },
@@ -86,3 +60,19 @@ export const STATIC_MENU: MenuItem[] = [
   { id: 'm104', name: 'MASALA CHAI',                   category: 'HOT BEVERAGES',            price: 49,  image: 'https://media.dodostatic.com/image/r:520x520/019cc702b90f76b9b6f20ac6494fbc87.jpg', tags: [] },
   { id: 'm105', name: 'FILTER COFFEE',                 category: 'HOT BEVERAGES',            price: 59,  image: 'https://media.dodostatic.com/image/r:520x520/019cc702b90f76b9b6f20ac6494fbc87.jpg', tags: [] },
 ];
+
+async function seed() {
+  console.log("Seeding menu items into Firestore...");
+  for (const item of STATIC_MENU) {
+    try {
+      await set(ref(db, `menu/${item.id}`), item);
+      console.log(`✅ Added ${item.name}`);
+    } catch (e) {
+      console.error(`❌ Failed ${item.name}: ${e.message}`);
+    }
+  }
+  console.log("Seeding complete!");
+  process.exit(0);
+}
+
+seed();

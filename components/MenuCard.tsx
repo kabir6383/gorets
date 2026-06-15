@@ -15,8 +15,10 @@ interface Props {
 
 const MenuCard = React.memo(({ item, cartQty, rating, onAdd, onRemove }: Props) => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
+  const isAvailable = item.available !== false; // true by default if field not set
 
   const handleAdd = () => {
+    if (!isAvailable) return;
     Animated.sequence([
       Animated.timing(scaleAnim, { toValue: 0.95, duration: 80, useNativeDriver: false }),
       Animated.spring(scaleAnim, { toValue: 1, friction: 4, useNativeDriver: false }),
@@ -25,19 +27,25 @@ const MenuCard = React.memo(({ item, cartQty, rating, onAdd, onRemove }: Props) 
   };
 
   return (
-    <Animated.View style={[s.card, { transform: [{ scale: scaleAnim }] }]}>
+    <Animated.View style={[s.card, { transform: [{ scale: scaleAnim }] }, !isAvailable && s.cardUnavailable]}>
       {/* Image */}
       <View style={s.imageWrap}>
-        <Image source={{ uri: item.image }} style={s.image} resizeMode="cover" />
+        <Image source={{ uri: item.image }} style={[s.image, !isAvailable && { opacity: 0.4 }]} resizeMode="cover" />
         {/* Veg / Non-veg dot */}
         <View style={[s.vegDot, { borderColor: item.category.toLowerCase().includes('veg') && !item.category.toLowerCase().includes('non') ? '#22c55e' : '#ef4444' }]}>
           <View style={[s.vegDotInner, { backgroundColor: item.category.toLowerCase().includes('veg') && !item.category.toLowerCase().includes('non') ? '#22c55e' : '#ef4444' }]} />
         </View>
+        {/* Not Available Banner */}
+        {!isAvailable && (
+          <View style={s.unavailableOverlay}>
+            <Text style={s.unavailableText}>NOT AVAILABLE</Text>
+          </View>
+        )}
       </View>
 
       {/* Info */}
       <View style={s.info}>
-        <Text style={s.name} numberOfLines={2}>{item.name}</Text>
+        <Text style={[s.name, !isAvailable && { color: '#666' }]} numberOfLines={2}>{item.name}</Text>
         
         <View style={s.metaRow}>
           <Text style={s.cat} numberOfLines={1}>{item.category}</Text>
@@ -52,7 +60,11 @@ const MenuCard = React.memo(({ item, cartQty, rating, onAdd, onRemove }: Props) 
         <View style={s.footer}>
           <Text style={s.price}>₹{item.price}</Text>
 
-          {cartQty === 0 ? (
+          {!isAvailable ? (
+            <View style={s.soldOutBtn}>
+              <Text style={s.soldOutText}>SOLD OUT</Text>
+            </View>
+          ) : cartQty === 0 ? (
             <TouchableOpacity style={s.addBtn} onPress={handleAdd} activeOpacity={0.85}>
               <Text style={s.addBtnText}>+ ADD</Text>
             </TouchableOpacity>
@@ -196,5 +208,23 @@ const s = StyleSheet.create({
     backgroundColor: C.accent,
     alignItems: 'center', justifyContent: 'center',
   },
-  qtyPlusText: { color: C.bg, fontSize: 15, fontFamily: 'Outfit_700Bold', lineHeight: 20 },
+  cardUnavailable: { opacity: 0.75 },
+  unavailableOverlay: {
+    position: 'absolute', inset: 0,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  unavailableText: {
+    color: '#fff', fontFamily: 'Outfit_900Black',
+    fontSize: 11, letterSpacing: 1.5, textAlign: 'center',
+  },
+  soldOutBtn: {
+    backgroundColor: 'rgba(239,68,68,0.12)',
+    borderWidth: 1, borderColor: 'rgba(239,68,68,0.35)',
+    borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5,
+  },
+  soldOutText: {
+    color: '#EF4444', fontFamily: 'Outfit_800ExtraBold',
+    fontSize: 10, letterSpacing: 0.5,
+  },
 });

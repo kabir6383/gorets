@@ -40,3 +40,7 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+ gorets-2cfda-firebase-adminsdk-fbsvc-8cdbd94f5d.json
+*-firebase-adminsdk-*.json
+*.json.local
