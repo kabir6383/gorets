@@ -29,6 +29,9 @@ import { ref, get } from 'firebase/database';
 const { width: SW } = Dimensions.get('window');
 const NUM_COLS = SW > 600 ? 3 : 2;
 
+// Create custom Animated FlatList to support web environments robustly
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+
 // How far the hero needs to scroll before the header "locks"
 const HERO_HEIGHT = 200;
 
@@ -311,7 +314,7 @@ export default function MenuScreen() {
           </View>
         </>
       ) : (
-        <Animated.FlatList
+        <AnimatedFlatList
           data={filteredItems}
           keyExtractor={(item: MenuItem) => item.id}
           renderItem={renderItem}
